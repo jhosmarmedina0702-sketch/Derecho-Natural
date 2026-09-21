@@ -1,0 +1,2909 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Derecho Natural</title>
+
+<style>
+/* =========================================================
+   PALETA Y VARIABLES
+========================================================= */
+
+:root {
+    --fondo: #fff8ff;
+    --fondo-secundario: #f5eaff;
+    --texto: #342044;
+    --texto-suave: #6f5b7d;
+
+    --morado: #9b6cff;
+    --morado-oscuro: #7044d8;
+    --rosa: #ff8fc7;
+    --azul: #70d7ff;
+    --amarillo: #ffe58a;
+    --verde: #8ee6bd;
+
+    --tarjeta: rgba(255,255,255,0.88);
+    --borde: rgba(155,108,255,0.25);
+
+    --sombra: 0 15px 40px rgba(104, 65, 150, 0.16);
+}
+
+/* =========================================================
+   MODO OSCURO
+========================================================= */
+
+body.dark {
+    --fondo: #171221;
+    --fondo-secundario: #211932;
+    --texto: #f8efff;
+    --texto-suave: #cfc1dc;
+
+    --tarjeta: rgba(38, 28, 53, 0.94);
+    --borde: rgba(190, 150, 255, 0.28);
+
+    --sombra: 0 15px 40px rgba(0,0,0,0.35);
+}
+
+/* =========================================================
+   GENERAL
+========================================================= */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background:
+        radial-gradient(circle at 10% 10%, rgba(255,143,199,0.20), transparent 25%),
+        radial-gradient(circle at 90% 20%, rgba(112,215,255,0.20), transparent 25%),
+        radial-gradient(circle at 50% 100%, rgba(155,108,255,0.18), transparent 30%),
+        var(--fondo);
+    color: var(--texto);
+    transition: background 0.4s ease, color 0.4s ease;
+    overflow-x: hidden;
+}
+
+/* =========================================================
+   DECORACIONES
+========================================================= */
+
+.decoracion {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(1px);
+    opacity: 0.6;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.bola1 {
+    width: 180px;
+    height: 180px;
+    background: var(--rosa);
+    top: -70px;
+    left: -60px;
+}
+
+.bola2 {
+    width: 220px;
+    height: 220px;
+    background: var(--azul);
+    right: -90px;
+    top: 25%;
+}
+
+.bola3 {
+    width: 160px;
+    height: 160px;
+    background: var(--amarillo);
+    bottom: -50px;
+    left: 20%;
+}
+
+/* =========================================================
+   CONTENEDOR
+========================================================= */
+
+.contenedor {
+    width: min(1150px, 92%);
+    margin: auto;
+}
+
+/* =========================================================
+   BARRA SUPERIOR
+========================================================= */
+
+.barra {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    backdrop-filter: blur(15px);
+    background: rgba(255,255,255,0.55);
+    border-bottom: 1px solid var(--borde);
+
+    padding: 15px 0;
+}
+
+body.dark .barra {
+    background: rgba(23,18,33,0.75);
+}
+
+.barra-contenido {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 12px;
+}
+
+/* =========================================================
+   BOTONES SUPERIORES
+========================================================= */
+
+.boton-control {
+    border: none;
+    background: var(--tarjeta);
+    color: var(--texto);
+
+    border: 1px solid var(--borde);
+    border-radius: 30px;
+
+    padding: 11px 18px;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    box-shadow: 0 5px 15px rgba(100,70,140,0.10);
+
+    transition: all 0.25s ease;
+}
+
+.boton-control:hover {
+    transform: translateY(-2px);
+    background: var(--morado);
+    color: white;
+}
+
+/* =========================================================
+   TRADUCTOR
+========================================================= */
+
+.traductor {
+    position: relative;
+}
+
+.menu-idiomas {
+    position: absolute;
+    right: 0;
+    top: 52px;
+
+    width: 180px;
+
+    background: var(--tarjeta);
+    border: 1px solid var(--borde);
+    border-radius: 18px;
+
+    padding: 8px;
+
+    box-shadow: var(--sombra);
+
+    display: none;
+}
+
+.menu-idiomas.mostrar {
+    display: block;
+}
+
+.menu-idiomas button {
+    width: 100%;
+    border: none;
+    background: transparent;
+
+    color: var(--texto);
+
+    padding: 11px;
+    border-radius: 12px;
+
+    cursor: pointer;
+    font-size: 14px;
+    text-align: left;
+
+    transition: 0.2s;
+}
+
+.menu-idiomas button:hover {
+    background: var(--fondo-secundario);
+}
+
+/* =========================================================
+   PANTALLAS
+========================================================= */
+
+.pantalla {
+    display: none;
+    min-height: calc(100vh - 75px);
+
+    padding: 70px 0 90px;
+
+    animation: aparecer 0.45s ease;
+}
+
+.pantalla.activa {
+    display: block;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================================================
+   PORTADA
+========================================================= */
+
+.portada {
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    min-height: calc(100vh - 75px);
+}
+
+.icono-principal {
+    width: 95px;
+    height: 95px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 30px;
+
+    background: linear-gradient(
+        135deg,
+        var(--morado),
+        var(--rosa)
+    );
+
+    color: white;
+
+    font-size: 45px;
+
+    box-shadow: var(--sombra);
+
+    margin-bottom: 30px;
+
+    transform: rotate(-4deg);
+}
+
+h1 {
+    font-size: clamp(2.4rem, 6vw, 4.8rem);
+    line-height: 1.05;
+
+    margin-bottom: 20px;
+
+    background: linear-gradient(
+        90deg,
+        var(--morado-oscuro),
+        var(--rosa)
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.subtitulo {
+    max-width: 700px;
+
+    margin: 0 auto 50px;
+
+    color: var(--texto-suave);
+
+    font-size: 1.15rem;
+    line-height: 1.8;
+}
+
+/* =========================================================
+   MENÚ PRINCIPAL
+========================================================= */
+
+.titulo-menu {
+    text-align: center;
+
+    font-size: 1.8rem;
+
+    margin-bottom: 28px;
+}
+
+.menu-principal {
+    width: min(850px, 100%);
+    margin: auto;
+
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 22px;
+}
+
+.opcion-menu {
+    border: none;
+
+    min-height: 125px;
+
+    border-radius: 28px;
+
+    padding: 25px;
+
+    background: var(--tarjeta);
+
+    border: 1px solid var(--borde);
+
+    color: var(--texto);
+
+    text-align: left;
+
+    cursor: pointer;
+
+    box-shadow: var(--sombra);
+
+    transition: 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.opcion-menu:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: var(--morado);
+}
+
+.numero {
+    min-width: 50px;
+    height: 50px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 17px;
+
+    background: linear-gradient(
+        135deg,
+        var(--morado),
+        var(--rosa)
+    );
+
+    color: white;
+
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.opcion-menu strong {
+    display: block;
+    font-size: 17px;
+    line-height: 1.4;
+}
+
+/* =========================================================
+   PÁGINAS DE INFORMACIÓN
+========================================================= */
+
+.encabezado-pagina {
+    text-align: center;
+    margin-bottom: 55px;
+}
+
+.encabezado-pagina .icono {
+    font-size: 45px;
+    margin-bottom: 18px;
+}
+
+.encabezado-pagina h2 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    margin-bottom: 15px;
+}
+
+.encabezado-pagina p {
+    color: var(--texto-suave);
+    font-size: 1.1rem;
+}
+
+/* =========================================================
+   TARJETAS DE INFORMACIÓN
+========================================================= */
+
+.informacion {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 25px;
+}
+
+.tarjeta {
+    background: var(--tarjeta);
+
+    border: 1px solid var(--borde);
+
+    border-radius: 28px;
+
+    padding: 32px;
+
+    box-shadow: var(--sombra);
+
+    transition: 0.25s ease;
+}
+
+.tarjeta:hover {
+    transform: translateY(-4px);
+}
+
+.tarjeta.grande {
+    grid-column: 1 / -1;
+}
+
+.tarjeta h3 {
+    color: var(--morado-oscuro);
+
+    margin-bottom: 15px;
+
+    font-size: 1.35rem;
+}
+
+body.dark .tarjeta h3 {
+    color: #c7a9ff;
+}
+
+.tarjeta p {
+    color: var(--texto-suave);
+
+    line-height: 1.85;
+
+    font-size: 1rem;
+}
+
+.tarjeta ul {
+    padding-left: 22px;
+}
+
+.tarjeta li {
+    color: var(--texto-suave);
+    margin-bottom: 12px;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   EJEMPLOS
+========================================================= */
+
+.ejemplos {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 22px;
+}
+
+.ejemplo {
+    padding: 30px;
+
+    background: var(--tarjeta);
+
+    border: 1px solid var(--borde);
+
+    border-radius: 26px;
+
+    box-shadow: var(--sombra);
+
+    text-align: center;
+}
+
+.ejemplo-icono {
+    font-size: 38px;
+    margin-bottom: 18px;
+}
+
+.ejemplo h3 {
+    margin-bottom: 12px;
+    color: var(--morado-oscuro);
+}
+
+body.dark .ejemplo h3 {
+    color: #c7a9ff;
+}
+
+.ejemplo p {
+    color: var(--texto-suave);
+    line-height: 1.7;
+}
+
+/* =========================================================
+   NAVEGACIÓN
+========================================================= */
+
+.navegacion {
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    gap: 15px;
+
+    margin-top: 55px;
+
+    flex-wrap: wrap;
+}
+
+.boton-nav {
+    border: none;
+
+    padding: 14px 24px;
+
+    border-radius: 30px;
+
+    background: var(--morado);
+
+    color: white;
+
+    font-weight: bold;
+
+    cursor: pointer;
+
+    transition: 0.25s;
+}
+
+.boton-nav:hover {
+    background: var(--morado-oscuro);
+    transform: translateY(-2px);
+}
+
+.boton-secundario {
+    background: var(--tarjeta);
+
+    color: var(--texto);
+
+    border: 1px solid var(--borde);
+}
+
+/* =========================================================
+   WHATSAPP
+========================================================= */
+
+.contacto {
+    margin-top: 55px;
+
+    text-align: center;
+
+    padding: 35px;
+
+    border-radius: 30px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(142,230,189,0.28),
+            rgba(112,215,255,0.22)
+        );
+
+    border: 1px solid var(--borde);
+}
+
+.contacto h3 {
+    margin-bottom: 12px;
+}
+
+.contacto p {
+    color: var(--texto-suave);
+    margin-bottom: 22px;
+}
+
+.whatsapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 14px 25px;
+
+    background: #25D366;
+
+    color: white;
+
+    text-decoration: none;
+
+    border-radius: 30px;
+
+    font-weight: bold;
+
+    transition: 0.25s;
+}
+
+.whatsapp:hover {
+    transform: translateY(-3px);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media (max-width: 800px) {
+
+    .menu-principal {
+        grid-template-columns: 1fr;
+    }
+
+    .informacion {
+        grid-template-columns: 1fr;
+    }
+
+    .tarjeta.grande {
+        grid-column: auto;
+    }
+
+    .ejemplos {
+        grid-template-columns: 1fr;
+    }
+
+    .barra-contenido {
+        justify-content: center;
+    }
+
+    .pantalla {
+        padding-top: 45px;
+    }
+}
+
+@media (max-width: 500px) {
+
+    .boton-control {
+        padding: 9px 13px;
+        font-size: 13px;
+    }
+
+    .tarjeta {
+        padding: 24px;
+    }
+
+    .opcion-menu {
+        min-height: 110px;
+        padding: 20px;
+    }
+}
+/* =========================================================
+   UNIVERSO DECORATIVO ANIMADO
+   NO MODIFICA EL MODO OSCURO NI LAS TRADUCCIONES
+========================================================= */
+
+.espacio-decorativo {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* =========================================================
+   PLANETAS
+========================================================= */
+
+.planeta {
+    position: absolute;
+    border-radius: 50%;
+    box-shadow:
+        inset -15px -15px 25px rgba(0,0,0,0.16),
+        0 10px 30px rgba(100,70,160,0.18);
+
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+}
+
+/* Planeta morado */
+
+.planeta-1 {
+    width: 72px;
+    height: 72px;
+
+    top: 15%;
+    left: 5%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #d8bfff,
+            #9b6cff 50%,
+            #7044d8
+        );
+
+    animation:
+        planetaFlota1 5s ease-in-out infinite;
+}
+
+/* Anillo */
+
+.planeta-1 .anillo {
+    position: absolute;
+
+    width: 105px;
+    height: 30px;
+
+    border: 5px solid rgba(255,143,199,0.75);
+
+    border-radius: 50%;
+
+    top: 22px;
+    left: -17px;
+
+    transform: rotate(-18deg);
+}
+
+/* Planeta rosa */
+
+.planeta-2 {
+    width: 48px;
+    height: 48px;
+
+    top: 34%;
+    right: 6%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #ffd1e8,
+            #ff8fc7 55%,
+            #e765a5
+        );
+
+    animation:
+        planetaFlota2 6s ease-in-out infinite;
+}
+
+/* Planeta amarillo */
+
+.planeta-3 {
+    width: 62px;
+    height: 62px;
+
+    bottom: 18%;
+    left: 7%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #fff6bc,
+            #ffe58a 55%,
+            #e5bf4f
+        );
+
+    animation:
+        planetaFlota3 7s ease-in-out infinite;
+}
+
+/* Cráteres */
+
+.crater {
+    position: absolute;
+
+    border-radius: 50%;
+
+    background: rgba(190,150,55,0.22);
+
+    box-shadow:
+        inset 2px 2px 4px rgba(120,90,20,0.15);
+}
+
+.crater-1 {
+    width: 12px;
+    height: 12px;
+
+    top: 14px;
+    left: 17px;
+}
+
+.crater-2 {
+    width: 8px;
+    height: 8px;
+
+    top: 34px;
+    left: 38px;
+}
+
+.crater-3 {
+    width: 6px;
+    height: 6px;
+
+    top: 27px;
+    left: 11px;
+}
+
+/* Planeta azul */
+
+.planeta-4 {
+    width: 38px;
+    height: 38px;
+
+    bottom: 12%;
+    right: 9%;
+
+    background:
+        radial-gradient(
+            circle at 30% 25%,
+            #c9f4ff,
+            #70d7ff 55%,
+            #38a9d3
+        );
+
+    animation:
+        planetaFlota4 5.5s ease-in-out infinite;
+}
+
+
+/* =========================================================
+   ANIMACIONES DE LOS PLANETAS
+========================================================= */
+
+@keyframes planetaFlota1 {
+
+    0%, 100% {
+        transform:
+            translateY(0)
+            rotate(-8deg);
+    }
+
+    50% {
+        transform:
+            translateY(-22px)
+            rotate(8deg);
+    }
+}
+
+
+@keyframes planetaFlota2 {
+
+    0%, 100% {
+        transform:
+            translate(0, 0)
+            rotate(0deg);
+    }
+
+    50% {
+        transform:
+            translate(-16px, -25px)
+            rotate(12deg);
+    }
+}
+
+
+@keyframes planetaFlota3 {
+
+    0%, 100% {
+        transform:
+            translateY(0)
+            rotate(0deg);
+    }
+
+    50% {
+        transform:
+            translateY(-18px)
+            rotate(-12deg);
+    }
+}
+
+
+@keyframes planetaFlota4 {
+
+    0%, 100% {
+        transform:
+            translate(0, 0);
+    }
+
+    50% {
+        transform:
+            translate(15px, -20px);
+    }
+}
+
+
+/* =========================================================
+   ESTRELLAS
+========================================================= */
+
+.estrella {
+    position: absolute;
+
+    color: var(--morado);
+
+    font-size: 24px;
+
+    opacity: 0.75;
+
+    animation:
+        estrellaBrilla 2.5s ease-in-out infinite;
+}
+
+.estrella-1 {
+    top: 12%;
+    left: 24%;
+    animation-delay: 0s;
+}
+
+.estrella-2 {
+    top: 25%;
+    right: 24%;
+    animation-delay: 0.7s;
+}
+
+.estrella-3 {
+    bottom: 28%;
+    left: 23%;
+    animation-delay: 1.2s;
+}
+
+.estrella-4 {
+    bottom: 15%;
+    right: 27%;
+    animation-delay: 0.4s;
+}
+
+.estrella-5 {
+    top: 52%;
+    left: 4%;
+    animation-delay: 1.7s;
+}
+
+.estrella-6 {
+    top: 67%;
+    right: 5%;
+    animation-delay: 2s;
+}
+
+
+@keyframes estrellaBrilla {
+
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(0.75) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.3) rotate(20deg);
+    }
+}
+
+
+/* =========================================================
+   PEQUEÑOS PUNTOS FLOTANTES
+========================================================= */
+
+.punto {
+    position: absolute;
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+
+    background: var(--rosa);
+
+    opacity: 0.65;
+
+    animation:
+        puntoFlota 4s ease-in-out infinite;
+}
+
+.punto-1 {
+    top: 20%;
+    left: 42%;
+}
+
+.punto-2 {
+    top: 42%;
+    right: 32%;
+    animation-delay: 1s;
+}
+
+.punto-3 {
+    bottom: 35%;
+    left: 40%;
+    animation-delay: 1.8s;
+}
+
+.punto-4 {
+    bottom: 20%;
+    right: 42%;
+    animation-delay: 0.5s;
+}
+
+.punto-5 {
+    top: 70%;
+    left: 15%;
+    animation-delay: 2.2s;
+}
+
+
+@keyframes puntoFlota {
+
+    0%, 100% {
+        transform:
+            translateY(0)
+            scale(0.8);
+
+        opacity: 0.35;
+    }
+
+    50% {
+        transform:
+            translateY(-15px)
+            scale(1.2);
+
+        opacity: 0.9;
+    }
+}
+
+
+/* =========================================================
+   EN MÓVIL: HACER LOS PLANETAS MÁS DISCRETOS
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .planeta-1 {
+        width: 48px;
+        height: 48px;
+        left: -8px;
+    }
+
+    .planeta-1 .anillo {
+        width: 70px;
+        height: 20px;
+        top: 14px;
+        left: -11px;
+        border-width: 3px;
+    }
+
+    .planeta-2 {
+        width: 35px;
+        height: 35px;
+        right: 4px;
+    }
+
+    .planeta-3 {
+        width: 42px;
+        height: 42px;
+        left: 3px;
+    }
+
+    .planeta-4 {
+        width: 30px;
+        height: 30px;
+        right: 4px;
+    }
+
+    .estrella {
+        font-size: 18px;
+    }
+}
+</style>
+</head>
+
+<body>
+<!-- =====================================================
+     DECORACIONES ANIMADAS
+===================================================== -->
+
+<div class="espacio-decorativo">
+
+    <!-- PLANETAS -->
+    <div class="planeta planeta-1">
+        <div class="anillo"></div>
+    </div>
+
+    <div class="planeta planeta-2"></div>
+
+    <div class="planeta planeta-3">
+        <div class="crater crater-1"></div>
+        <div class="crater crater-2"></div>
+        <div class="crater crater-3"></div>
+    </div>
+
+    <div class="planeta planeta-4"></div>
+
+    <!-- ESTRELLAS -->
+    <span class="estrella estrella-1">✦</span>
+    <span class="estrella estrella-2">✧</span>
+    <span class="estrella estrella-3">✦</span>
+    <span class="estrella estrella-4">✧</span>
+    <span class="estrella estrella-5">✦</span>
+    <span class="estrella estrella-6">✧</span>
+
+    <!-- ESTRELLITAS PEQUEÑAS -->
+    <span class="punto punto-1"></span>
+    <span class="punto punto-2"></span>
+    <span class="punto punto-3"></span>
+    <span class="punto punto-4"></span>
+    <span class="punto punto-5"></span>
+
+</div>
+<!-- =====================================================
+     DECORACIONES
+===================================================== -->
+
+<div class="decoracion bola1"></div>
+<div class="decoracion bola2"></div>
+<div class="decoracion bola3"></div>
+
+<!-- =====================================================
+     BARRA SUPERIOR
+===================================================== -->
+
+<header class="barra">
+    <div class="contenedor barra-contenido">
+
+        <div class="traductor">
+
+            <button
+                class="boton-control"
+                id="botonTraductor"
+                onclick="abrirIdiomas()">
+                🌐 <span data-i18n="traducir">Traducir</span>
+            </button>
+
+            <div class="menu-idiomas" id="menuIdiomas">
+
+                <button onclick="cambiarIdioma('es')">
+                    🇲🇽 Español
+                </button>
+
+                <button onclick="cambiarIdioma('en')">
+                    🇺🇸 English
+                </button>
+
+                <button onclick="cambiarIdioma('ko')">
+                    🇰🇷 한국어
+                </button>
+
+                <button onclick="cambiarIdioma('ja')">
+                    🇯🇵 日本語
+                </button>
+
+            </div>
+
+        </div>
+
+        <button
+            class="boton-control"
+            id="botonTema"
+            onclick="cambiarTema()">
+            🌙 <span data-i18n="modoOscuro">Modo oscuro</span>
+        </button>
+
+    </div>
+</header>
+
+
+<!-- =====================================================
+     PANTALLA 0
+===================================================== -->
+
+<section id="inicio" class="pantalla activa">
+
+    <div class="contenedor portada">
+
+        <div class="icono-principal">
+            ⚖️
+        </div>
+
+        <h1 data-i18n="bienvenida">
+            Bienvenido a esta fuente de información
+        </h1>
+
+        <p
+            class="subtitulo"
+            data-i18n="descripcionInicio">
+            Explora de manera sencilla, visual e interactiva los
+            conceptos fundamentales relacionados con el derecho natural.
+        </p>
+
+        <h2
+            class="titulo-menu"
+            data-i18n="queTeInteresa">
+            ¿Qué te interesa conocer?
+        </h2>
+
+        <div class="menu-principal">
+
+            <button
+                class="opcion-menu"
+                onclick="irA('derecho')">
+
+                <span class="numero">01</span>
+
+                <strong data-i18n="menuDerecho">
+                    ¿Qué es el derecho natural?
+                </strong>
+
+            </button>
+
+
+            <button
+                class="opcion-menu"
+                onclick="irA('derechos')">
+
+                <span class="numero">02</span>
+
+                <strong data-i18n="menuDerechos">
+                    ¿Qué son los derechos naturales?
+                </strong>
+
+            </button>
+
+
+            <button
+                class="opcion-menu"
+                onclick="irA('ejemplos')">
+
+                <span class="numero">03</span>
+
+                <strong data-i18n="menuEjemplos">
+                    Ejemplos de derechos naturales
+                </strong>
+
+            </button>
+
+
+            <button
+                class="opcion-menu"
+                onclick="irA('mexico')">
+
+                <span class="numero">04</span>
+
+                <strong data-i18n="menuMexico">
+                    ¿Cómo se aplica el derecho natural en México?
+                </strong>
+
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PANTALLA 1
+===================================================== -->
+
+<section id="derecho" class="pantalla">
+
+    <div class="contenedor">
+
+        <div class="encabezado-pagina">
+
+            <div class="icono">⚖️</div>
+
+            <h2 data-i18n="tituloDerecho">
+                ¿Qué es el derecho natural?
+            </h2>
+
+            <p data-i18n="subtituloDerecho">
+                Una perspectiva jurídica y filosófica sobre los principios
+                inherentes a la persona.
+            </p>
+
+        </div>
+
+
+        <div class="informacion">
+
+            <article class="tarjeta grande">
+
+                <h3 data-i18n="definicionTitulo">
+                    Definición
+                </h3>
+
+                <p data-i18n="definicionTexto">
+                    El derecho natural es una corriente del pensamiento
+                    jurídico y filosófico que sostiene que existen principios
+                    de justicia y derechos que corresponden a las personas
+                    por su propia naturaleza humana. Estos principios no
+                    dependen exclusivamente de que una autoridad los haya
+                    escrito o reconocido formalmente.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta">
+
+                <h3 data-i18n="caracteristicasTitulo">
+                    Características
+                </h3>
+
+                <ul>
+
+                    <li data-i18n="caracteristica1">
+                        Se relaciona con la dignidad humana.
+                    </li>
+
+                    <li data-i18n="caracteristica2">
+                        Busca principios de justicia.
+                    </li>
+
+                    <li data-i18n="caracteristica3">
+                        Pretende tener validez más allá de una legislación
+                        concreta.
+                    </li>
+
+                    <li data-i18n="caracteristica4">
+                        Ha influido en el desarrollo de los derechos humanos.
+                    </li>
+
+                </ul>
+
+            </article>
+
+
+            <article class="tarjeta">
+
+                <h3 data-i18n="abarcaTitulo">
+                    ¿Qué abarca?
+                </h3>
+
+                <p data-i18n="abarcaTexto">
+                    El derecho natural abarca reflexiones sobre la justicia,
+                    la dignidad, la libertad, la igualdad, la vida y otros
+                    principios considerados fundamentales para la convivencia
+                    humana.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta grande">
+
+                <h3 data-i18n="importanciaTitulo">
+                    Importancia
+                </h3>
+
+                <p data-i18n="importanciaTexto">
+                    Históricamente, el derecho natural ha servido como
+                    fundamento para cuestionar leyes consideradas injustas y
+                    para desarrollar ideas sobre los límites del poder y la
+                    protección de la persona.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div class="navegacion">
+
+            <button
+                class="boton-nav boton-secundario"
+                onclick="irA('inicio')"
+                data-i18n="inicio">
+                Inicio
+            </button>
+
+            <button
+                class="boton-nav"
+                onclick="irA('derechos')"
+                data-i18n="siguiente">
+                Siguiente →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PANTALLA 2
+===================================================== -->
+
+<section id="derechos" class="pantalla">
+
+    <div class="contenedor">
+
+        <div class="encabezado-pagina">
+
+            <div class="icono">🕊️</div>
+
+            <h2 data-i18n="tituloDerechos">
+                ¿Qué son los derechos naturales?
+            </h2>
+
+            <p data-i18n="subtituloDerechos">
+                Derechos considerados inherentes a toda persona.
+            </p>
+
+        </div>
+
+
+        <div class="informacion">
+
+            <article class="tarjeta grande">
+
+                <h3 data-i18n="queSonTitulo">
+                    ¿Qué son?
+                </h3>
+
+                <p data-i18n="queSonTexto">
+                    Los derechos naturales son aquellos derechos que,
+                    desde la perspectiva del derecho natural, corresponden
+                    a las personas por el simple hecho de ser humanas.
+                    Se consideran anteriores o independientes de su
+                    reconocimiento mediante una ley positiva.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta">
+
+                <h3 data-i18n="fundamentoTitulo">
+                    Fundamento
+                </h3>
+
+                <p data-i18n="fundamentoTexto">
+                    Su fundamento se encuentra en ideas como la dignidad,
+                    la razón, la libertad, la igualdad y la propia naturaleza
+                    humana.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta">
+
+                <h3 data-i18n="diferenciaTitulo">
+                    Diferencia con los derechos positivos
+                </h3>
+
+                <p data-i18n="diferenciaTexto">
+                    Los derechos naturales se entienden como principios
+                    inherentes a la persona, mientras que los derechos
+                    positivos son aquellos reconocidos y establecidos
+                    formalmente por un ordenamiento jurídico.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta grande">
+
+                <h3 data-i18n="relacionTitulo">
+                    Relación con los derechos humanos
+                </h3>
+
+                <p data-i18n="relacionTexto">
+                    El pensamiento del derecho natural ha influido
+                    históricamente en la construcción de concepciones
+                    modernas sobre los derechos humanos y en la idea de que
+                    existen límites al poder de las autoridades.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div class="navegacion">
+
+            <button
+                class="boton-nav boton-secundario"
+                onclick="irA('inicio')"
+                data-i18n="inicio">
+                Inicio
+            </button>
+
+            <button
+                class="boton-nav"
+                onclick="irA('ejemplos')"
+                data-i18n="siguiente">
+                Siguiente →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PANTALLA 3
+===================================================== -->
+
+<section id="ejemplos" class="pantalla">
+
+    <div class="contenedor">
+
+        <div class="encabezado-pagina">
+
+            <div class="icono">✨</div>
+
+            <h2 data-i18n="tituloEjemplos">
+                Ejemplos de derechos naturales
+            </h2>
+
+            <p data-i18n="subtituloEjemplos">
+                Estos son ejemplos de principios y derechos relacionados
+                con la tradición del derecho natural.
+            </p>
+
+        </div>
+
+
+        <div class="ejemplos">
+
+            <article class="ejemplo">
+
+                <div class="ejemplo-icono">❤️</div>
+
+                <h3 data-i18n="vidaTitulo">
+                    Derecho a la vida
+                </h3>
+
+                <p data-i18n="vidaTexto">
+                    Se relaciona con la protección de la existencia y
+                    dignidad de toda persona.
+                </p>
+
+            </article>
+
+
+            <article class="ejemplo">
+
+                <div class="ejemplo-icono">🕊️</div>
+
+                <h3 data-i18n="libertadTitulo">
+                    Libertad
+                </h3>
+
+                <p data-i18n="libertadTexto">
+                    Se refiere a la capacidad de la persona para actuar
+                    y tomar decisiones sin una interferencia injustificada.
+                </p>
+
+            </article>
+
+
+            <article class="ejemplo">
+
+                <div class="ejemplo-icono">⚖️</div>
+
+                <h3 data-i18n="igualdadTitulo">
+                    Igualdad
+                </h3>
+
+                <p data-i18n="igualdadTexto">
+                    Parte de la idea de que todas las personas poseen una
+                    dignidad fundamental y merecen consideración jurídica.
+                </p>
+
+            </article>
+
+
+            <article class="ejemplo">
+
+                <div class="ejemplo-icono">🧠</div>
+
+                <h3 data-i18n="razonTitulo">
+                    Uso de la razón
+                </h3>
+
+                <p data-i18n="razonTexto">
+                    La razón ha sido considerada una herramienta para
+                    identificar principios de justicia.
+                </p>
+
+            </article>
+
+
+            <article class="ejemplo">
+
+                <div class="ejemplo-icono">🏠</div>
+
+                <h3 data-i18n="propiedadTitulo">
+                    Propiedad
+                </h3>
+
+                <p data-i18n="propiedadTexto">
+                    Algunas tradiciones iusnaturalistas han considerado
+                    la propiedad como un derecho relacionado con la persona.
+                </p>
+
+            </article>
+
+
+            <article class="ejemplo">
+
+                <div class="ejemplo-icono">🤝</div>
+
+                <h3 data-i18n="dignidadTitulo">
+                    Dignidad
+                </h3>
+
+                <p data-i18n="dignidadTexto">
+                    Representa la consideración del valor inherente de
+                    cada persona.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <div class="navegacion">
+
+            <button
+                class="boton-nav boton-secundario"
+                onclick="irA('inicio')"
+                data-i18n="inicio">
+                Inicio
+            </button>
+
+            <button
+                class="boton-nav"
+                onclick="irA('mexico')"
+                data-i18n="siguiente">
+                Siguiente →
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PANTALLA 4
+===================================================== -->
+
+<section id="mexico" class="pantalla">
+
+    <div class="contenedor">
+
+        <div class="encabezado-pagina">
+
+            <div class="icono">🇲🇽</div>
+
+            <h2 data-i18n="tituloMexico">
+                ¿Cómo se aplica el derecho natural en México?
+            </h2>
+
+            <p data-i18n="subtituloMexico">
+                Su relación con la dignidad humana, los derechos humanos
+                y el orden jurídico mexicano.
+            </p>
+
+        </div>
+
+
+        <div class="informacion">
+
+            <article class="tarjeta grande">
+
+                <h3 data-i18n="aplicacionTitulo">
+                    Aplicación en México
+                </h3>
+
+                <p data-i18n="aplicacionTexto">
+                    En México, las ideas relacionadas con el derecho natural
+                    pueden observarse principalmente en la importancia que
+                    tiene la dignidad humana y en el reconocimiento y
+                    protección de los derechos humanos dentro del sistema
+                    jurídico.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta">
+
+                <h3 data-i18n="constitucionTitulo">
+                    Constitución
+                </h3>
+
+                <p data-i18n="constitucionTexto">
+                    La Constitución Política de los Estados Unidos Mexicanos
+                    reconoce derechos humanos y establece obligaciones para
+                    las autoridades relacionadas con su respeto, protección,
+                    promoción y garantía.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta">
+
+                <h3 data-i18n="dignidadMexicoTitulo">
+                    Dignidad humana
+                </h3>
+
+                <p data-i18n="dignidadMexicoTexto">
+                    La dignidad humana ocupa un lugar importante en la
+                    interpretación contemporánea de los derechos humanos
+                    y permite relacionar el orden jurídico con la protección
+                    de la persona.
+                </p>
+
+            </article>
+
+
+            <article class="tarjeta grande">
+
+                <h3 data-i18n="autoridadesTitulo">
+                    Autoridades y derechos humanos
+                </h3>
+
+                <p data-i18n="autoridadesTexto">
+                    Las autoridades mexicanas deben actuar dentro del marco
+                    constitucional y respetar los derechos humanos reconocidos
+                    por la Constitución y los tratados internacionales de los
+                    que México es parte.
+                </p>
+
+            </article>
+
+        </div>
+
+
+        <!-- CONTACTO -->
+
+        <div class="contacto">
+
+            <h3 data-i18n="contactoTitulo">
+                ¿Tienes alguna duda?
+            </h3>
+
+            <p data-i18n="contactoTexto">
+                Si deseas comunicarte con nosotros, puedes enviarnos
+                un mensaje directamente.
+            </p>
+
+            <!--
+                IMPORTANTE:
+                REEMPLAZA 521XXXXXXXXXX POR TU NÚMERO DE WHATSAPP.
+
+                NO aparecerá el número en la página.
+                Solamente aparecerá el botón.
+            -->
+
+            <a
+                class="whatsapp"
+                id="botonWhatsApp"
+                href="https://wa.me/9831549926"
+                target="_blank">
+
+                💬 <span data-i18n="contactanos">
+                    Contáctanos
+                </span>
+
+            </a>
+
+        </div>
+
+
+        <div class="navegacion">
+
+            <button
+                class="boton-nav boton-secundario"
+                onclick="irA('inicio')"
+                data-i18n="inicio">
+                Inicio
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* =========================================================
+   TRADUCCIONES COMPLETAS
+========================================================= */
+
+const traducciones = {
+
+    es: {
+
+        traducir: "Traducir",
+        modoOscuro: "Modo oscuro",
+        modoClaro: "Modo claro",
+
+        bienvenida: "Bienvenido a esta fuente de información",
+
+        descripcionInicio:
+        "Explora de manera sencilla, visual e interactiva los conceptos fundamentales relacionados con el derecho natural.",
+
+        queTeInteresa:
+        "¿Qué te interesa conocer?",
+
+        menuDerecho:
+        "¿Qué es el derecho natural?",
+
+        menuDerechos:
+        "¿Qué son los derechos naturales?",
+
+        menuEjemplos:
+        "Ejemplos de derechos naturales",
+
+        menuMexico:
+        "¿Cómo se aplica el derecho natural en México?",
+
+        tituloDerecho:
+        "¿Qué es el derecho natural?",
+
+        subtituloDerecho:
+        "Una perspectiva jurídica y filosófica sobre los principios inherentes a la persona.",
+
+        definicionTitulo:
+        "Definición",
+
+        definicionTexto:
+        "El derecho natural es una corriente del pensamiento jurídico y filosófico que sostiene que existen principios de justicia y derechos que corresponden a las personas por su propia naturaleza humana. Estos principios no dependen exclusivamente de que una autoridad los haya escrito o reconocido formalmente.",
+
+        caracteristicasTitulo:
+        "Características",
+
+        caracteristica1:
+        "Se relaciona con la dignidad humana.",
+
+        caracteristica2:
+        "Busca principios de justicia.",
+
+        caracteristica3:
+        "Pretende tener validez más allá de una legislación concreta.",
+
+        caracteristica4:
+        "Ha influido en el desarrollo de los derechos humanos.",
+
+        abarcaTitulo:
+        "¿Qué abarca?",
+
+        abarcaTexto:
+        "El derecho natural abarca reflexiones sobre la justicia, la dignidad, la libertad, la igualdad, la vida y otros principios considerados fundamentales para la convivencia humana.",
+
+        importanciaTitulo:
+        "Importancia",
+
+        importanciaTexto:
+        "Históricamente, el derecho natural ha servido como fundamento para cuestionar leyes consideradas injustas y para desarrollar ideas sobre los límites del poder y la protección de la persona.",
+
+        tituloDerechos:
+        "¿Qué son los derechos naturales?",
+
+        subtituloDerechos:
+        "Derechos considerados inherentes a toda persona.",
+
+        queSonTitulo:
+        "¿Qué son?",
+
+        queSonTexto:
+        "Los derechos naturales son aquellos derechos que, desde la perspectiva del derecho natural, corresponden a las personas por el simple hecho de ser humanas. Se consideran anteriores o independientes de su reconocimiento mediante una ley positiva.",
+
+        fundamentoTitulo:
+        "Fundamento",
+
+        fundamentoTexto:
+        "Su fundamento se encuentra en ideas como la dignidad, la razón, la libertad, la igualdad y la propia naturaleza humana.",
+
+        diferenciaTitulo:
+        "Diferencia con los derechos positivos",
+
+        diferenciaTexto:
+        "Los derechos naturales se entienden como principios inherentes a la persona, mientras que los derechos positivos son aquellos reconocidos y establecidos formalmente por un ordenamiento jurídico.",
+
+        relacionTitulo:
+        "Relación con los derechos humanos",
+
+        relacionTexto:
+        "El pensamiento del derecho natural ha influido históricamente en la construcción de concepciones modernas sobre los derechos humanos y en la idea de que existen límites al poder de las autoridades.",
+
+        tituloEjemplos:
+        "Ejemplos de derechos naturales",
+
+        subtituloEjemplos:
+        "Estos son ejemplos de principios y derechos relacionados con la tradición del derecho natural.",
+
+        vidaTitulo:
+        "Derecho a la vida",
+
+        vidaTexto:
+        "Se relaciona con la protección de la existencia y dignidad de toda persona.",
+
+        libertadTitulo:
+        "Libertad",
+
+        libertadTexto:
+        "Se refiere a la capacidad de la persona para actuar y tomar decisiones sin una interferencia injustificada.",
+
+        igualdadTitulo:
+        "Igualdad",
+
+        igualdadTexto:
+        "Parte de la idea de que todas las personas poseen una dignidad fundamental y merecen consideración jurídica.",
+
+        razonTitulo:
+        "Uso de la razón",
+
+        razonTexto:
+        "La razón ha sido considerada una herramienta para identificar principios de justicia.",
+
+        propiedadTitulo:
+        "Propiedad",
+
+        propiedadTexto:
+        "Algunas tradiciones iusnaturalistas han considerado la propiedad como un derecho relacionado con la persona.",
+
+        dignidadTitulo:
+        "Dignidad",
+
+        dignidadTexto:
+        "Representa la consideración del valor inherente de cada persona.",
+
+        tituloMexico:
+        "¿Cómo se aplica el derecho natural en México?",
+
+        subtituloMexico:
+        "Su relación con la dignidad humana, los derechos humanos y el orden jurídico mexicano.",
+
+        aplicacionTitulo:
+        "Aplicación en México",
+
+        aplicacionTexto:
+        "En México, las ideas relacionadas con el derecho natural pueden observarse principalmente en la importancia que tiene la dignidad humana y en el reconocimiento y protección de los derechos humanos dentro del sistema jurídico.",
+
+        constitucionTitulo:
+        "Constitución",
+
+        constitucionTexto:
+        "La Constitución Política de los Estados Unidos Mexicanos reconoce derechos humanos y establece obligaciones para las autoridades relacionadas con su respeto, protección, promoción y garantía.",
+
+        dignidadMexicoTitulo:
+        "Dignidad humana",
+
+        dignidadMexicoTexto:
+        "La dignidad humana ocupa un lugar importante en la interpretación contemporánea de los derechos humanos y permite relacionar el orden jurídico con la protección de la persona.",
+
+        autoridadesTitulo:
+        "Autoridades y derechos humanos",
+
+        autoridadesTexto:
+        "Las autoridades mexicanas deben actuar dentro del marco constitucional y respetar los derechos humanos reconocidos por la Constitución y los tratados internacionales de los que México es parte.",
+
+        contactoTitulo:
+        "¿Tienes alguna duda?",
+
+        contactoTexto:
+        "Si deseas comunicarte con nosotros, puedes enviarnos un mensaje directamente.",
+
+        contactanos:
+        "Contáctanos",
+
+        inicio:
+        "Inicio",
+
+        siguiente:
+        "Siguiente →"
+    },
+
+
+    /* =====================================================
+       INGLÉS
+    ===================================================== */
+
+    en: {
+
+        traducir: "Translate",
+        modoOscuro: "Dark mode",
+        modoClaro: "Light mode",
+
+        bienvenida:
+        "Welcome to this information source",
+
+        descripcionInicio:
+        "Explore the fundamental concepts related to natural law in a simple, visual and interactive way.",
+
+        queTeInteresa:
+        "What would you like to learn?",
+
+        menuDerecho:
+        "What is natural law?",
+
+        menuDerechos:
+        "What are natural rights?",
+
+        menuEjemplos:
+        "Examples of natural rights",
+
+        menuMexico:
+        "How is natural law applied in Mexico?",
+
+        tituloDerecho:
+        "What is natural law?",
+
+        subtituloDerecho:
+        "A legal and philosophical perspective on principles inherent to the person.",
+
+        definicionTitulo:
+        "Definition",
+
+        definicionTexto:
+        "Natural law is a school of legal and philosophical thought that holds that there are principles of justice and rights that belong to people because of their human nature. These principles do not depend exclusively on whether an authority has formally written or recognized them.",
+
+        caracteristicasTitulo:
+        "Characteristics",
+
+        caracteristica1:
+        "It is related to human dignity.",
+
+        caracteristica2:
+        "It seeks principles of justice.",
+
+        caracteristica3:
+        "It aims to have validity beyond a specific legislation.",
+
+        caracteristica4:
+        "It has influenced the development of human rights.",
+
+        abarcaTitulo:
+        "What does it encompass?",
+
+        abarcaTexto:
+        "Natural law encompasses reflections on justice, dignity, freedom, equality, life and other principles considered fundamental to human coexistence.",
+
+        importanciaTitulo:
+        "Importance",
+
+        importanciaTexto:
+        "Historically, natural law has served as a basis for questioning laws considered unjust and for developing ideas about limits on power and the protection of individuals.",
+
+        tituloDerechos:
+        "What are natural rights?",
+
+        subtituloDerechos:
+        "Rights considered inherent to every person.",
+
+        queSonTitulo:
+        "What are they?",
+
+        queSonTexto:
+        "Natural rights are rights that, from the perspective of natural law, belong to people simply because they are human. They are considered prior to or independent of their recognition through positive law.",
+
+        fundamentoTitulo:
+        "Foundation",
+
+        fundamentoTexto:
+        "Their foundation can be found in ideas such as dignity, reason, freedom, equality and human nature itself.",
+
+        diferenciaTitulo:
+        "Difference from positive rights",
+
+        diferenciaTexto:
+        "Natural rights are understood as principles inherent to the person, while positive rights are formally recognized and established by a legal system.",
+
+        relacionTitulo:
+        "Relationship with human rights",
+
+        relacionTexto:
+        "Natural law thought has historically influenced modern conceptions of human rights and the idea that there are limits to governmental power.",
+
+        tituloEjemplos:
+        "Examples of natural rights",
+
+        subtituloEjemplos:
+        "These are examples of principles and rights related to the natural law tradition.",
+
+        vidaTitulo:
+        "Right to life",
+
+        vidaTexto:
+        "It is related to the protection of the existence and dignity of every person.",
+
+        libertadTitulo:
+        "Freedom",
+
+        libertadTexto:
+        "It refers to a person's ability to act and make decisions without unjustified interference.",
+
+        igualdadTitulo:
+        "Equality",
+
+        igualdadTexto:
+        "It is based on the idea that all people possess fundamental dignity and deserve legal consideration.",
+
+        razonTitulo:
+        "Use of reason",
+
+        razonTexto:
+        "Reason has been considered a tool for identifying principles of justice.",
+
+        propiedadTitulo:
+        "Property",
+
+        propiedadTexto:
+        "Some natural law traditions have considered property a right related to the individual.",
+
+        dignidadTitulo:
+        "Dignity",
+
+        dignidadTexto:
+        "It represents recognition of the inherent value of every person.",
+
+        tituloMexico:
+        "How is natural law applied in Mexico?",
+
+        subtituloMexico:
+        "Its relationship with human dignity, human rights and the Mexican legal system.",
+
+        aplicacionTitulo:
+        "Application in Mexico",
+
+        aplicacionTexto:
+        "In Mexico, ideas related to natural law can mainly be observed in the importance given to human dignity and in the recognition and protection of human rights within the legal system.",
+
+        constitucionTitulo:
+        "Constitution",
+
+        constitucionTexto:
+        "The Political Constitution of the United Mexican States recognizes human rights and establishes obligations for authorities regarding their respect, protection, promotion and guarantee.",
+
+        dignidadMexicoTitulo:
+        "Human dignity",
+
+        dignidadMexicoTexto:
+        "Human dignity has an important place in contemporary interpretations of human rights and connects the legal system with the protection of individuals.",
+
+        autoridadesTitulo:
+        "Authorities and human rights",
+
+        autoridadesTexto:
+        "Mexican authorities must act within the constitutional framework and respect the human rights recognized by the Constitution and international treaties to which Mexico is a party.",
+
+        contactoTitulo:
+        "Do you have any questions?",
+
+        contactoTexto:
+        "If you would like to contact us, you can send us a message directly.",
+
+        contactanos:
+        "Contact us",
+
+        inicio:
+        "Home",
+
+        siguiente:
+        "Next →"
+    },
+
+
+    /* =====================================================
+       COREANO
+    ===================================================== */
+
+    ko: {
+
+        traducir: "번역",
+        modoOscuro: "다크 모드",
+        modoClaro: "라이트 모드",
+
+        bienvenida:
+        "이 정보 자료에 오신 것을 환영합니다",
+
+        descripcionInicio:
+        "자연법과 관련된 기본 개념을 쉽고 시각적이며 상호작용적인 방식으로 알아보세요.",
+
+        queTeInteresa:
+        "무엇을 알고 싶으신가요?",
+
+        menuDerecho:
+        "자연법이란 무엇인가요?",
+
+        menuDerechos:
+        "자연권이란 무엇인가요?",
+
+        menuEjemplos:
+        "자연권의 예",
+
+        menuMexico:
+        "멕시코에서 자연법은 어떻게 적용되나요?",
+
+        tituloDerecho:
+        "자연법이란 무엇인가요?",
+
+        subtituloDerecho:
+        "인간에게 본질적으로 존재하는 원칙에 대한 법적·철학적 관점입니다.",
+
+        definicionTitulo:
+        "정의",
+
+        definicionTexto:
+        "자연법은 인간의 본성에 따라 사람에게 정의의 원칙과 권리가 존재한다고 보는 법철학적 사상입니다. 이러한 원칙은 반드시 국가나 권위자가 법률로 작성하거나 공식적으로 인정해야만 존재하는 것은 아닙니다.",
+
+        caracteristicasTitulo:
+        "특징",
+
+        caracteristica1:
+        "인간의 존엄성과 관련되어 있습니다.",
+
+        caracteristica2:
+        "정의의 원칙을 추구합니다.",
+
+        caracteristica3:
+        "특정한 법률을 넘어서는 타당성을 추구합니다.",
+
+        caracteristica4:
+        "인권의 발전에 영향을 주었습니다.",
+
+        abarcaTitulo:
+        "무엇을 포함하나요?",
+
+        abarcaTexto:
+        "자연법은 정의, 존엄성, 자유, 평등, 생명 및 인간의 공존에 중요하다고 여겨지는 여러 원칙에 대한 사상을 포함합니다.",
+
+        importanciaTitulo:
+        "중요성",
+
+        importanciaTexto:
+        "역사적으로 자연법은 부당하다고 여겨지는 법률에 의문을 제기하고 권력의 한계와 인간 보호에 관한 사상을 발전시키는 데 기초가 되어 왔습니다.",
+
+        tituloDerechos:
+        "자연권이란 무엇인가요?",
+
+        subtituloDerechos:
+        "모든 사람에게 본질적으로 존재한다고 여겨지는 권리입니다.",
+
+        queSonTitulo:
+        "무엇인가요?",
+
+        queSonTexto:
+        "자연권은 자연법의 관점에서 인간이라는 이유만으로 모든 사람에게 인정되는 권리입니다. 이러한 권리는 실정법을 통해 인정되기 이전부터 존재하거나 실정법과 독립적인 것으로 이해됩니다.",
+
+        fundamentoTitulo:
+        "근거",
+
+        fundamentoTexto:
+        "그 근거는 인간의 존엄성, 이성, 자유, 평등 및 인간의 본성과 같은 개념에서 찾을 수 있습니다.",
+
+        diferenciaTitulo:
+        "실정법상의 권리와의 차이",
+
+        diferenciaTexto:
+        "자연권은 인간에게 본질적으로 존재하는 원칙으로 이해되는 반면, 실정법상의 권리는 법체계에 의해 공식적으로 인정되고 규정됩니다.",
+
+        relacionTitulo:
+        "인권과의 관계",
+
+        relacionTexto:
+        "자연법 사상은 현대적인 인권 개념의 형성과 정부 권력에도 일정한 한계가 있다는 생각에 역사적으로 영향을 주었습니다.",
+
+        tituloEjemplos:
+        "자연권의 예",
+
+        subtituloEjemplos:
+        "다음은 자연법 전통과 관련된 원칙과 권리의 예입니다.",
+
+        vidaTitulo:
+        "생명권",
+
+        vidaTexto:
+        "모든 사람의 생명과 존엄성을 보호하는 것과 관련된 권리입니다.",
+
+        libertadTitulo:
+        "자유",
+
+        libertadTexto:
+        "부당한 간섭 없이 행동하고 결정을 내릴 수 있는 개인의 능력을 의미합니다.",
+
+        igualdadTitulo:
+        "평등",
+
+        igualdadTexto:
+        "모든 사람이 기본적인 존엄성을 가지고 있으며 법적으로 존중받아야 한다는 생각에 기초합니다.",
+
+        razonTitulo:
+        "이성의 사용",
+
+        razonTexto:
+        "이성은 정의의 원칙을 발견하고 이해하기 위한 도구로 여겨져 왔습니다.",
+
+        propiedadTitulo:
+        "재산권",
+
+        propiedadTexto:
+        "일부 자연법 전통에서는 재산권을 개인과 관련된 권리로 보았습니다.",
+
+        dignidadTitulo:
+        "존엄성",
+
+        dignidadTexto:
+        "모든 사람이 본질적인 가치를 가진 존재라는 인식을 나타냅니다.",
+
+        tituloMexico:
+        "멕시코에서 자연법은 어떻게 적용되나요?",
+
+        subtituloMexico:
+        "인간의 존엄성, 인권 및 멕시코 법체계와의 관계입니다.",
+
+        aplicacionTitulo:
+        "멕시코에서의 적용",
+
+        aplicacionTexto:
+        "멕시코에서는 인간의 존엄성을 중요하게 여기고 법체계 안에서 인권을 인정하고 보호하는 부분에서 자연법과 관련된 사상을 찾아볼 수 있습니다.",
+
+        constitucionTitulo:
+        "헌법",
+
+        constitucionTexto:
+        "멕시코 합중국 정치헌법은 인권을 인정하며 국가기관이 인권을 존중하고 보호하며 증진하고 보장해야 할 의무를 규정하고 있습니다.",
+
+        dignidadMexicoTitulo:
+        "인간의 존엄성",
+
+        dignidadMexicoTexto:
+        "인간의 존엄성은 현대적인 인권 해석에서 중요한 위치를 차지하며 법체계와 인간 보호를 연결하는 역할을 합니다.",
+
+        autoridadesTitulo:
+        "국가기관과 인권",
+
+        autoridadesTexto:
+        "멕시코의 국가기관은 헌법의 틀 안에서 활동해야 하며 헌법과 멕시코가 가입한 국제조약에서 인정되는 인권을 존중해야 합니다.",
+
+        contactoTitulo:
+        "궁금한 점이 있으신가요?",
+
+        contactoTexto:
+        "문의하고 싶으시다면 직접 메시지를 보내실 수 있습니다.",
+
+        contactanos:
+        "문의하기",
+
+        inicio:
+        "홈",
+
+        siguiente:
+        "다음 →"
+    },
+
+
+    /* =====================================================
+       JAPONÉS
+    ===================================================== */
+
+    ja: {
+
+        traducir: "翻訳",
+        modoOscuro: "ダークモード",
+        modoClaro: "ライトモード",
+
+        bienvenida:
+        "この情報サイトへようこそ",
+
+        descripcionInicio:
+        "自然法に関する基本的な概念を、分かりやすく、視覚的でインタラクティブな方法で学びましょう。",
+
+        queTeInteresa:
+        "何について知りたいですか？",
+
+        menuDerecho:
+        "自然法とは何ですか？",
+
+        menuDerechos:
+        "自然権とは何ですか？",
+
+        menuEjemplos:
+        "自然権の例",
+
+        menuMexico:
+        "メキシコでは自然法はどのように適用されていますか？",
+
+        tituloDerecho:
+        "自然法とは何ですか？",
+
+        subtituloDerecho:
+        "人間に本質的に存在する原則についての法的・哲学的な考え方です。",
+
+        definicionTitulo:
+        "定義",
+
+        definicionTexto:
+        "自然法とは、人間の本性に基づいて、人には正義の原則や権利が存在すると考える法哲学・哲学上の思想です。これらの原則は、国家や権威によって法律として明文化されたり、正式に認められたりすることだけに依存するものではありません。",
+
+        caracteristicasTitulo:
+        "特徴",
+
+        caracteristica1:
+        "人間の尊厳と関係しています。",
+
+        caracteristica2:
+        "正義の原則を求めます。",
+
+        caracteristica3:
+        "特定の法律を超えた妥当性を持つことを目指します。",
+
+        caracteristica4:
+        "人権の発展に影響を与えてきました。",
+
+        abarcaTitulo:
+        "何を含みますか？",
+
+        abarcaTexto:
+        "自然法には、正義、尊厳、自由、平等、生命、そして人間の共存に重要だと考えられるその他の原則についての考察が含まれます。",
+
+        importanciaTitulo:
+        "重要性",
+
+        importanciaTexto:
+        "歴史的に、自然法は不正だと考えられる法律を問い直し、権力の限界や人間の保護についての考えを発展させるための基礎となってきました。",
+
+        tituloDerechos:
+        "自然権とは何ですか？",
+
+        subtituloDerechos:
+        "すべての人に本質的に備わっていると考えられる権利です。",
+
+        queSonTitulo:
+        "自然権とは？",
+
+        queSonTexto:
+        "自然権とは、自然法の考え方から、人間であるというだけで誰もが持つとされる権利です。これらは実定法によって認められる以前から存在する、または実定法から独立した権利として理解されています。",
+
+        fundamentoTitulo:
+        "根拠",
+
+        fundamentoTexto:
+        "その根拠は、人間の尊厳、理性、自由、平等、人間の本性などの考え方にあります。",
+
+        diferenciaTitulo:
+        "実定法上の権利との違い",
+
+        diferenciaTexto:
+        "自然権は人間に本質的に備わる原則として理解される一方、実定法上の権利は法体系によって正式に認められ、定められたものです。",
+
+        relacionTitulo:
+        "人権との関係",
+
+        relacionTexto:
+        "自然法思想は、現代的な人権概念の形成や、国家権力には一定の限界があるという考え方に歴史的な影響を与えてきました。",
+
+        tituloEjemplos:
+        "自然権の例",
+
+        subtituloEjemplos:
+        "以下は、自然法の伝統に関連する原則や権利の例です。",
+
+        vidaTitulo:
+        "生命への権利",
+
+        vidaTexto:
+        "すべての人の生命と尊厳を守ることに関係する権利です。",
+
+        libertadTitulo:
+        "自由",
+
+        libertadTexto:
+        "不当な干渉を受けずに行動し、意思決定を行う個人の能力を意味します。",
+
+        igualdadTitulo:
+        "平等",
+
+        igualdadTexto:
+        "すべての人が基本的な尊厳を持ち、法的に尊重されるべきだという考えに基づいています。",
+
+        razonTitulo:
+        "理性の使用",
+
+        razonTexto:
+        "理性は、正義の原則を見つけ出し理解するための手段と考えられてきました。",
+
+        propiedadTitulo:
+        "財産",
+
+        propiedadTexto:
+        "一部の自然法思想では、財産を個人に関連する権利として捉えてきました。",
+
+        dignidadTitulo:
+        "尊厳",
+
+        dignidadTexto:
+        "すべての人が本質的な価値を持つ存在であるという認識を表します。",
+
+        tituloMexico:
+        "メキシコでは自然法はどのように適用されていますか？",
+
+        subtituloMexico:
+        "人間の尊厳、人権、そしてメキシコの法体系との関係です。",
+
+        aplicacionTitulo:
+        "メキシコでの適用",
+
+        aplicacionTexto:
+        "メキシコでは、人間の尊厳を重視することや、法体系の中で人権を認め、保護することに、自然法と関連する考え方を見ることができます。",
+
+        constitucionTitulo:
+        "憲法",
+
+        constitucionTexto:
+        "メキシコ合衆国憲法は人権を認め、国家機関に対して、その尊重、保護、促進、保障に関する義務を定めています。",
+
+        dignidadMexicoTitulo:
+        "人間の尊厳",
+
+        dignidadMexicoTexto:
+        "人間の尊厳は現代の人権解釈において重要な位置を占め、法体系と人間の保護を結びつける役割を果たしています。",
+
+        autoridadesTitulo:
+        "国家機関と人権",
+
+        autoridadesTexto:
+        "メキシコの国家機関は憲法の枠組みの中で活動し、憲法およびメキシコが締約国となっている国際条約で認められている人権を尊重しなければなりません。",
+
+        contactoTitulo:
+        "質問がありますか？",
+
+        contactoTexto:
+        "お問い合わせをご希望の場合は、直接メッセージを送ることができます。",
+
+        contactanos:
+        "お問い合わせ",
+
+        inicio:
+        "ホーム",
+
+        siguiente:
+        "次へ →"
+    }
+
+};
+
+
+/* =========================================================
+   IDIOMA ACTUAL
+========================================================= */
+
+let idiomaActual = "es";
+
+
+/* =========================================================
+   CAMBIAR TODO EL IDIOMA
+========================================================= */
+
+function cambiarIdioma(idioma) {
+
+    idiomaActual = idioma;
+
+    const textos = traducciones[idioma];
+
+    /*
+       AQUÍ ESTÁ LA PARTE IMPORTANTE:
+
+       Busca TODOS los elementos que tengan data-i18n
+       y cambia su contenido por la traducción correspondiente.
+    */
+
+    document.querySelectorAll("[data-i18n]").forEach(elemento => {
+
+        const clave = elemento.getAttribute("data-i18n");
+
+        if (textos[clave]) {
+            elemento.textContent = textos[clave];
+        }
+
+    });
+
+
+    /*
+       También cambia el idioma del documento.
+       Esto ayuda a los lectores de pantalla y al navegador.
+    */
+
+    document.documentElement.lang = idioma;
+
+
+    /*
+       Cambia el título de la pestaña.
+    */
+
+    const titulos = {
+
+        es: "Derecho Natural",
+
+        en: "Natural Law",
+
+        ko: "자연법",
+
+        ja: "自然法"
+
+    };
+
+    document.title = titulos[idioma];
+
+
+    /*
+       Cierra el menú de idiomas.
+    */
+
+    document
+        .getElementById("menuIdiomas")
+        .classList.remove("mostrar");
+
+
+    /*
+       Guardamos el idioma para que no se pierda
+       al cambiar de pantalla.
+    */
+
+    localStorage.setItem("idioma", idioma);
+}
+
+
+/* =========================================================
+   ABRIR / CERRAR MENÚ DE IDIOMAS
+========================================================= */
+
+function abrirIdiomas() {
+
+    document
+        .getElementById("menuIdiomas")
+        .classList.toggle("mostrar");
+}
+
+
+/* =========================================================
+   CAMBIAR DE PANTALLA
+========================================================= */
+
+function irA(id) {
+
+    /*
+       Ocultamos todas las pantallas.
+    */
+
+    document
+        .querySelectorAll(".pantalla")
+        .forEach(pantalla => {
+
+            pantalla.classList.remove("activa");
+
+        });
+
+
+    /*
+       Mostramos la pantalla seleccionada.
+    */
+
+    const pantalla = document.getElementById(id);
+
+    if (pantalla) {
+        pantalla.classList.add("activa");
+    }
+
+
+    /*
+       Actualizamos la URL.
+       Ejemplo:
+       index.html#derecho
+       index.html#ejemplos
+       etc.
+    */
+
+    history.pushState(null, "", "#" + id);
+
+
+    /*
+       Regresamos arriba de la página.
+    */
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+}
+
+
+/* =========================================================
+   BOTÓN MODO OSCURO / CLARO
+========================================================= */
+
+function cambiarTema() {
+
+    document.body.classList.toggle("dark");
+
+    const oscuro =
+        document.body.classList.contains("dark");
+
+
+    const boton = document.getElementById("botonTema");
+
+    if (oscuro) {
+
+        boton.innerHTML =
+            '☀️ <span data-i18n="modoClaro"></span>';
+
+    } else {
+
+        boton.innerHTML =
+            '🌙 <span data-i18n="modoOscuro"></span>';
+
+    }
+
+
+    /*
+       MUY IMPORTANTE:
+       Después de modificar el botón,
+       volvemos a traducirlo al idioma actual.
+    */
+
+    const textoActual =
+        traducciones[idiomaActual];
+
+    boton.querySelector("[data-i18n]").textContent =
+        oscuro
+        ? textoActual.modoClaro
+        : textoActual.modoOscuro;
+
+
+    /*
+       Guardamos la preferencia.
+    */
+
+    localStorage.setItem(
+        "tema",
+        oscuro ? "dark" : "light"
+    );
+}
+
+
+/* =========================================================
+   CARGAR CONFIGURACIÓN GUARDADA
+========================================================= */
+
+function cargarConfiguracion() {
+
+    /*
+       Cargar idioma
+    */
+
+    const idiomaGuardado =
+        localStorage.getItem("idioma");
+
+    if (idiomaGuardado && traducciones[idiomaGuardado]) {
+
+        cambiarIdioma(idiomaGuardado);
+
+    }
+
+
+    /*
+       Cargar tema
+    */
+
+    const temaGuardado =
+        localStorage.getItem("tema");
+
+    if (temaGuardado === "dark") {
+
+        document.body.classList.add("dark");
+
+        const boton =
+            document.getElementById("botonTema");
+
+        boton.innerHTML =
+            '☀️ <span data-i18n="modoClaro"></span>';
+
+        const texto =
+            traducciones[idiomaActual];
+
+        boton.querySelector("[data-i18n]").textContent =
+            texto.modoClaro;
+    }
+
+
+    /*
+       Si la URL tiene una pantalla específica,
+       la abrimos.
+    */
+
+    const hash =
+        window.location.hash.replace("#", "");
+
+    if (hash && document.getElementById(hash)) {
+
+        irA(hash);
+
+    }
+
+}
+
+
+/* =========================================================
+   CERRAR MENÚ SI SE HACE CLIC FUERA
+========================================================= */
+
+document.addEventListener("click", function(event) {
+
+    const traductor =
+        document.querySelector(".traductor");
+
+    const menu =
+        document.getElementById("menuIdiomas");
+
+    if (!traductor.contains(event.target)) {
+
+        menu.classList.remove("mostrar");
+
+    }
+
+});
+
+
+/* =========================================================
+   BOTONES ATRÁS / ADELANTE DEL NAVEGADOR
+========================================================= */
+
+window.addEventListener("popstate", function() {
+
+    const hash =
+        window.location.hash.replace("#", "");
+
+    if (hash && document.getElementById(hash)) {
+
+        document
+            .querySelectorAll(".pantalla")
+            .forEach(p => p.classList.remove("activa"));
+
+        document
+            .getElementById(hash)
+            .classList.add("activa");
+
+    } else {
+
+        irA("inicio");
+
+    }
+
+});
+
+
+/* =========================================================
+   INICIAR
+========================================================= */
+
+cargarConfiguracion();
+
+</script>
+
+</body>
+</html>
